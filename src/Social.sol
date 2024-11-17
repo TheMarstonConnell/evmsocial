@@ -20,12 +20,15 @@ contract SocialPoster {
     mapping(uint256 => uint256[]) private comments;
     mapping(uint256 => uint256[]) private quotes;
     mapping(uint256 => mapping(address => bool)) private likes;
+    mapping(address => uint256[]) private userPosts;
 
     function createPost(Post memory post) private returns (uint256) {
         uint256 i = postCounter;
         post.id = i;
         posts[postCounter] = post;  
         postCounter ++;
+
+        userPosts[msg.sender].push(i);
 
         return i;
     }
@@ -101,5 +104,18 @@ contract SocialPoster {
         }
 
         return quotePosts;
+    }
+
+    function getPostsFrom(address poster) public view returns (Post[] memory) {
+        uint256[] memory ps = userPosts[poster];
+
+        Post[] memory userPs = new Post[](ps.length);
+
+
+        for (uint i = 0; i < ps.length; i ++) {
+            userPs[i] = posts[ps[i]];
+        }
+
+        return userPs;
     }
 }

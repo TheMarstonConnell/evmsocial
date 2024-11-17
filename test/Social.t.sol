@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import {Test, console} from "forge-std/Test.sol";
+import {Test} from "forge-std/Test.sol";
 import {SocialPoster} from "../src/Social.sol";
-import {console} from "forge-std/console.sol";
 
 contract SocialPosterTest is Test {
     SocialPoster public socialPoster;
@@ -13,6 +12,7 @@ contract SocialPosterTest is Test {
     }
 
     function test_Post() public {
+
         
         uint256 newId = socialPoster.makePost("this is a stupid post", 0, 0);
 
@@ -37,5 +37,9 @@ contract SocialPosterTest is Test {
         SocialPoster.Post[] memory quotes = socialPoster.getQuotes(1);
         assertEq(quotes.length, 1);
         assertEq(quotes[0].id, 4);
+
+    
+        assertEq(socialPoster.getPostsFrom(0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496).length, 4);
+
     }
 }
