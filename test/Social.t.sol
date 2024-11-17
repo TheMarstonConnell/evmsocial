@@ -40,6 +40,7 @@ contract SocialPosterTest is Test {
 
     
         assertEq(socialPoster.getPostsFrom(0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496).length, 4);
+        assertEq(socialPoster.getPostsFrom(0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38).length, 0);
 
     }
 }
