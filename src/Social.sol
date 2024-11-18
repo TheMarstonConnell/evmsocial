@@ -14,7 +14,7 @@ contract SocialPoster {
         uint256 likeCount;
     }
 
-    uint256 private postCounter = 1;
+    uint256 private postCounter;
 
     mapping(uint256 => Post) private posts;
     mapping(uint256 => uint256[]) private comments;
@@ -23,11 +23,11 @@ contract SocialPoster {
     mapping(address => uint256[]) private userPosts;
 
     function createPost(Post memory post) private returns (uint256) {
+        postCounter ++;
+
         uint256 i = postCounter;
         post.id = i;
         posts[postCounter] = post;  
-        postCounter ++;
-
         userPosts[msg.sender].push(i);
 
         return i;
@@ -117,5 +117,34 @@ contract SocialPoster {
         }
 
         return userPs;
+    }
+
+    function getRecentPosts(uint256 countIn) public view returns (Post[] memory) {
+        uint256 count = countIn;
+        if (count > postCounter) {
+            count = postCounter;
+        }
+
+
+        Post[] memory ps = new Post[](count);
+
+        for (uint i = 0; i < count; i ++) {
+            ps[i] = posts[postCounter - i];
+        }
+
+        return ps;
+    }
+
+    function getPost(uint256 id) public view returns (Post memory) {
+        require( posts[id].id > 0, "post does not exist");
+
+    
+        return posts[id];
+    }
+
+    function getHasLiked(uint256 postId, address liker) public view returns (bool) {
+        require( posts[postId].id > 0, "post does not exist");
+
+        return likes[postId][liker];
     }
 }
